@@ -1,8 +1,7 @@
 <script>
   import {
     baseUrl, token, project, component,
-    sourceLang, targetLang, loading, darkMode,
-    saveToLocalStorage
+    sourceLang, targetLang, loading, darkMode
   } from '../stores.js';
 
   export let onFetch;
@@ -59,8 +58,10 @@
   }
 
   function save() {
-    // Placeholder for save functionality
     console.log("Save button clicked");
+    if (onFetch) {
+      onFetch(); // Call the external function passed via the prop
+    }
   }
 </script>
 
@@ -75,28 +76,28 @@
     <div style="color: red; margin-bottom: 1rem;">{error}</div>
   {/if}
 
-  <label>Weblate API URL</label>
-  <input bind:value={$baseUrl} placeholder="https://translate.example.com/api" />
+  <label for="baseUrl">Weblate API URL</label>
+  <input id="baseUrl" bind:value={$baseUrl} placeholder="https://translate.example.com/api" />
 
-  <label>API Token</label>
-  <input bind:value={$token} placeholder="API Token" type="password" />
+  <label for="apiToken">API Token</label>
+  <input id="apiToken" bind:value={$token} placeholder="API Token" type="password" />
 
-  <label>Project</label>
-  <input bind:value={$project} placeholder="project-name" />
+  <label for="project">Project</label>
+  <input id="project" bind:value={$project} placeholder="project-name" />
 
-  <label>Component</label>
-  <input bind:value={$component} placeholder="component-name" />
+  <label for="component">Component</label>
+  <input id="component" bind:value={$component} placeholder="component-name" />
 
-  <label>Source language</label>
-  <select bind:value={$sourceLang}>
+  <label for="sourceLang">Source language</label>
+  <select id="sourceLang" bind:value={$sourceLang}>
     <option value="" disabled>Select source language</option>
     {#each langs as lang}
       <option value={lang}>{lang}</option>
     {/each}
   </select>
 
-  <label>Target language</label>
-  <select bind:value={$targetLang}>
+  <label for="targetLang">Target language</label>
+  <select id="targetLang" bind:value={$targetLang}>
     <option value="" disabled>Select target language</option>
     {#each langs as lang}
       <option value={lang}>{lang}</option>

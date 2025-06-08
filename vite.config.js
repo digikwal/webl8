@@ -3,25 +3,32 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
 export default defineConfig({
-  // Required for GitHub Pages - change 'webl8' for repo name if different
+  // Required for GitHub Pages – update if your repo name is different
   base: '/webl8/',
 
   plugins: [svelte()],
 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      // Shortcut '@' points to the src folder
+      '@': path.resolve(__dirname, 'src')
     }
   },
 
   server: {
-    port: 5173,        // development server (npm run dev)
-    open: true,
-    strictPort: true
+    port: 5173,        // Dev server: npm run dev
+    open: true,        // Automatically opens in browser
+    strictPort: true   // Fails if port 5173 is in use (no fallback)
   },
 
   preview: {
-    port: 4173,        // preview build (npm run preview)
-    strictPort: true
+    port: 4173,        // Preview server: npm run preview
+    strictPort: true   // Fails if port 4173 is in use (no fallback)
+  },
+
+  build: {
+    sourcemap: true,   // Useful for debugging production builds
+    outDir: 'dist',    // Optional: explicit output directory
+    emptyOutDir: true  // Clears old files from dist before build
   }
 });

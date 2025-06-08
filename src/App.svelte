@@ -36,28 +36,3 @@
   <SettingsForm onFetch={getStrings} onToggleTheme={toggleTheme} />
   <TranslationList />
 </div>
-
-<style>
-  :global(body) {
-    font-family: sans-serif;
-    margin: 2rem;
-    background: var(--bg);
-    color: var(--text);
-  }
-
-  input, textarea, select {
-    width: 100%;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-
-  .dark {
-    --bg: #121212;
-    --text: #eee;
-  }
-
-  .light {
-    --bg: #fff;
-    --text: #000;
-  }
-</style>

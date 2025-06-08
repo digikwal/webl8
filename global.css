@@ -54,3 +54,20 @@ button {
 button:hover {
   background: #0056b3;
 }
+
+/* Add these styles */
+input, textarea, select {
+  width: 100%;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.dark {
+  --bg: #121212;
+  --text: #eee;
+}
+
+.light {
+  --bg: #fff;
+  --text: #000;
+}

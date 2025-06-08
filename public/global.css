@@ -2,8 +2,8 @@
   --font-body: system-ui, sans-serif;
   --transition-speed: 0.3s;
   --bg-light: #ffffff;
-  --text-light: #000000;
-  --bg-dark: #121212;
+  --text-light: #111111;
+  --bg-dark: #111111;
   --text-dark: #eeeeee;
 }
 
@@ -64,8 +64,8 @@ button:hover {
 .app {
   font-family: var(--font-body);
   padding: 2rem;
-  max-width: 800px;
-  margin: auto;
+  max-width: 720px; /* Updated from 800px */
+  margin: 0 auto; /* Updated for centering */
   background-color: var(--bg-light);
   color: var(--text-light);
   transition: background var(--transition-speed), color var(--transition-speed);
@@ -91,6 +91,7 @@ h1 {
 .theme-toggle {
   background: transparent;
   border: 1px solid var(--text-light);
+  font-size: 0.9rem; /* Updated font size */
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
@@ -115,6 +116,16 @@ h1 {
 
 .error {
   color: red;
-  margin-bottom: 1rem;
+  margin: 1rem 0; /* Updated margin */
   font-weight: bold;
+}
+
+.light {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+}
+
+.dark {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
 }

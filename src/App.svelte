@@ -10,9 +10,10 @@
 
   let fetchError = '';
 
+  // Fetch untranslated strings using current store values
   async function getStrings() {
-    loading.set(true);
     fetchError = '';
+    loading.set(true);
 
     const { data, error } = await fetchStrings({
       baseUrl: $baseUrl,
@@ -48,15 +49,17 @@
     </button>
   </header>
 
-  <section class="form-section">
-    <SettingsForm onFetch={getStrings} />
-  </section>
+  <main>
+    <section class="form-section">
+      <SettingsForm onFetch={getStrings} />
+    </section>
 
-  {#if fetchError}
-    <div class="error">{fetchError}</div>
-  {/if}
+    {#if fetchError}
+      <div class="error">{fetchError}</div>
+    {/if}
 
-  <section class="translations">
-    <TranslationList />
-  </section>
+    <section class="translations">
+      <TranslationList />
+    </section>
+  </main>
 </div>

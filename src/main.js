@@ -1,21 +1,12 @@
 import App from './App.svelte';
 
-let app;
+const target = document.getElementById('app');
 
-function mountApp() {
-  const target = document.getElementById('app');
-  if (!target) {
-    console.error('Mount target #app not found in DOM.');
-    return;
-  }
-
-  app = new App({ target });
+if (!target) {
+  console.error('❌ Mount target #app not found in the DOM.');
+  throw new Error('Missing mount target: #app');
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mountApp);
-} else {
-  mountApp();
-}
+const app = new App({ target });
 
 export default app;

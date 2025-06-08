@@ -1,4 +1,5 @@
 <script>
+  import { onDestroy } from 'svelte';
   import { fetchStrings } from '../lib/api';
   import {
     baseUrl, token, project, component,
@@ -8,11 +9,17 @@
   let errorMessage = '';
   let debounce;
 
-  // Debounced fetch
-  $: if ($baseUrl && $token && $project && $component && $targetLang) {
-    clearTimeout(debounce);
-    debounce = setTimeout(loadStrings, 300);
+  // Reactive trigger for loading strings
+  $: {
+    if ($baseUrl && $token && $project && $component && $targetLang) {
+      clearTimeout(debounce);
+      debounce = setTimeout(loadStrings, 300);
+    }
   }
+
+  onDestroy(() => {
+    clearTimeout(debounce);
+  });
 
   async function loadStrings() {
     errorMessage = '';
@@ -39,29 +46,29 @@
   async function submitTranslation(id, text) {
     const cleaned = text.trim();
     if (!cleaned) {
-      console.warn("Empty translation skipped");
+      console.warn("⚠ Empty translation skipped");
       return;
     }
 
     try {
-      const response = await fetch(`${$baseUrl}/units/${id}/`, {
-        method: "PATCH",
+      const res = await fetch(`${$baseUrl}/units/${id}/`, {
+        method: 'PATCH',
         headers: {
           Authorization: `Token ${$token}`,
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ target: [cleaned] })
       });
 
-      if (!response.ok) {
-        const errData = await response.json();
-        console.error("Failed to submit:", errData);
-        alert(`❌ Failed to submit: ${errData.detail || response.status}`);
+      if (!res.ok) {
+        const errData = await res.json();
+        console.error('❌ Failed to submit:', errData);
+        alert(`❌ Submission failed: ${errData.detail || res.status}`);
       } else {
         console.log(`✅ Submitted translation for ID ${id}`);
       }
     } catch (err) {
-      console.error("Error submitting translation:", err);
+      console.error('⚠ Error submitting:', err);
       alert(`⚠ Error submitting: ${err.message}`);
     }
   }
@@ -86,3 +93,26 @@
     </div>
   {/each}
 {/if}
+
+<style>
+  .unit {
+    margin-top: 2rem;
+  }
+
+  .source {
+    margin-bottom: 0.5rem;
+  }
+
+  .error {
+    color: red;
+    margin-bottom: 1rem;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 60px;
+    font-size: 1rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+</style>

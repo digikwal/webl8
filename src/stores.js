@@ -1,38 +1,39 @@
 import { writable } from 'svelte/store';
 
 /**
- * Create a writable store synced with localStorage, with fallback for restricted environments.
+ * Creates a writable store synchronized with localStorage.
+ * Automatically falls back if localStorage is unavailable.
  */
-function persistentStore(key, initial) {
-  let isLocalStorageAvailable = true;
+function persistentStore(key, initialValue) {
+  let localStorageAvailable = true;
 
-  const read = () => {
+  function load() {
     try {
-      const value = localStorage.getItem(key);
-      return value !== null ? value : initial;
+      const stored = localStorage.getItem(key);
+      return stored !== null ? stored : initialValue;
     } catch (err) {
-      console.warn(`⚠️ Cannot read localStorage key "${key}":`, err);
-      isLocalStorageAvailable = false;
-      return initial;
+      console.warn(`⚠️ Unable to access localStorage key "${key}":`, err);
+      localStorageAvailable = false;
+      return initialValue;
     }
-  };
+  }
 
-  const store = writable(read());
+  const store = writable(load());
 
   store.subscribe(value => {
-    if (!isLocalStorageAvailable) return;
+    if (!localStorageAvailable) return;
     try {
       localStorage.setItem(key, value);
     } catch (err) {
-      console.error(`❌ Failed to write "${key}" to localStorage:`, err);
-      isLocalStorageAvailable = false;
+      console.error(`❌ Failed to persist key "${key}":`, err);
+      localStorageAvailable = false;
     }
   });
 
   return store;
 }
 
-// Persistent Weblate settings
+// 🧊 Persistent settings (auto-loaded and saved)
 export const baseUrl     = persistentStore('baseUrl', '');
 export const token       = persistentStore('token', '');
 export const project     = persistentStore('project', '');
@@ -40,18 +41,18 @@ export const component   = persistentStore('component', '');
 export const sourceLang  = persistentStore('sourceLang', '');
 export const targetLang  = persistentStore('targetLang', '');
 
-// UI-only runtime state
+// 🌈 UI-only volatile state
 export const darkMode = writable(false);
 export const loading  = writable(false);
 export const results  = writable([]);
 
 /**
- * Utility to manually write to localStorage (not linked to a store)
+ * Manually save a raw value to localStorage (useful outside of Svelte stores).
  */
 export function saveToLocalStorage(key, value) {
   try {
     localStorage.setItem(key, value);
   } catch (err) {
-    console.error(`❌ Failed to save "${key}" manually:`, err);
+    console.error(`❌ Manual save failed for "${key}":`, err);
   }
 }

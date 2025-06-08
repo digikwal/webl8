@@ -1,18 +1,17 @@
 <script>
   import { onDestroy } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import {
     baseUrl, token, project, component,
     sourceLang, targetLang, loading, darkMode
   } from '../stores.js';
 
-  export let onFetch = () => {};
-  export let onToggleTheme = () => {};
+  const dispatch = createEventDispatcher();
 
   let langs = [];
   let error = '';
   let debounceTimeout;
 
-  // Debounced effect for API call
   $: if ($baseUrl && $token && $project && $component) {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(fetchLanguages, 300);
@@ -33,7 +32,6 @@
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Failed to fetch languages.');
-
       if (!Array.isArray(data)) throw new Error('Unexpected API response format.');
 
       langs = [...new Set(data.map(item => item.language_code))].sort();
@@ -55,12 +53,16 @@
       return;
     }
     error = '';
-    onFetch();
+    dispatch('fetch'); // Replaces onFetch
+  }
+
+  function toggleTheme() {
+    dispatch('toggle-theme'); // Replaces onToggleTheme
   }
 </script>
 
 <div>
-  <button on:click={onToggleTheme}>
+  <button on:click={toggleTheme}>
     {$darkMode ? '☀ Light Mode' : '🌙 Dark Mode'}
   </button>
 
@@ -85,7 +87,7 @@
   {#if langs.length > 0}
     <label for="sourceLang">Source language</label>
     <select id="sourceLang" bind:value={$sourceLang}>
-      <option value="" disabled selected>Select source language</option>
+      <option value="" disabled>Select source language</option>
       {#each langs as lang}
         <option value={lang}>{lang}</option>
       {/each}
@@ -93,7 +95,7 @@
 
     <label for="targetLang">Target language</label>
     <select id="targetLang" bind:value={$targetLang}>
-      <option value="" disabled selected>Select target language</option>
+      <option value="" disabled>Select target language</option>
       {#each langs as lang}
         <option value={lang}>{lang}</option>
       {/each}

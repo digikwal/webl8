@@ -3,8 +3,8 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
 export default defineConfig({
-  // Required for GitHub Pages to load assets correctly
-  base: './',
+  // Required for GitHub Pages - change 'webl8' for repo name if different
+  base: '/webl8/',
 
   plugins: [svelte()],
 
@@ -15,13 +15,13 @@ export default defineConfig({
   },
 
   server: {
-    port: 5173,
+    port: 5173,        // development server (npm run dev)
     open: true,
     strictPort: true
   },
 
   preview: {
-    port: 4173,
+    port: 4173,        // preview build (npm run preview)
     strictPort: true
   }
 });

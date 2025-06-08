@@ -35,6 +35,12 @@ textarea:focus {
   outline: none;
 }
 
+label {
+  font-weight: bold;
+  margin-top: 1rem;
+  display: block;
+}
+
 input, select, button {
   font-size: 1rem;
   padding: 0.5rem;
@@ -99,8 +105,16 @@ h1 {
   margin-bottom: 2rem;
 }
 
+.unit {
+  margin-top: 2rem;
+}
+
+.source {
+  margin-bottom: 0.5rem;
+}
+
 .error {
   color: red;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-weight: bold;
 }

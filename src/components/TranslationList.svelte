@@ -1,11 +1,23 @@
 <script>
   import { fetchStrings } from '../lib/api';
-  import { baseUrl, token, project, component, targetLang, results, loading } from '../stores.js';
+  import {
+    baseUrl, token, project, component,
+    targetLang, results, loading
+  } from '../stores.js';
 
   let errorMessage = '';
+  let debounce;
+
+  // Debounced fetch
+  $: if ($baseUrl && $token && $project && $component && $targetLang) {
+    clearTimeout(debounce);
+    debounce = setTimeout(loadStrings, 300);
+  }
 
   async function loadStrings() {
+    errorMessage = '';
     loading.set(true);
+
     const { data, error } = await fetchStrings({
       baseUrl: $baseUrl,
       token: $token,
@@ -14,21 +26,19 @@
       targetLang: $targetLang
     });
 
-    if (error) {
-      errorMessage = error; // Display error in the UI
+    if (error || !Array.isArray(data)) {
+      errorMessage = error || 'Failed to fetch strings.';
       results.set([]);
     } else {
-      results.set(data); // Update the store with fetched strings
+      results.set(data);
     }
+
     loading.set(false);
   }
 
-  $: if ($baseUrl && $token && $project && $component && $targetLang) {
-    loadStrings();
-  }
-
   async function submitTranslation(id, text) {
-    if (!text || text.trim().length === 0) {
+    const cleaned = text.trim();
+    if (!cleaned) {
       console.warn("Empty translation skipped");
       return;
     }
@@ -40,25 +50,31 @@
           Authorization: `Token ${$token}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ target: [text.trim()] })
+        body: JSON.stringify({ target: [cleaned] })
       });
 
       if (!response.ok) {
         const errData = await response.json();
         console.error("Failed to submit:", errData);
+        alert(`❌ Failed to submit: ${errData.detail || response.status}`);
+      } else {
+        console.log(`✅ Submitted translation for ID ${id}`);
       }
     } catch (err) {
       console.error("Error submitting translation:", err);
+      alert(`⚠ Error submitting: ${err.message}`);
     }
   }
 </script>
 
 {#if errorMessage}
-  <div class="error">Error: {errorMessage}</div>
+  <div class="error">⚠ {errorMessage}</div>
 {/if}
 
-{#if $results.length === 0}
-  <p>No untranslated strings found.</p>
+{#if $loading}
+  <p>⏳ Loading untranslated strings...</p>
+{:else if $results.length === 0}
+  <p>✅ No untranslated strings found.</p>
 {:else}
   {#each $results as r (r.id)}
     <div class="unit">
@@ -70,25 +86,3 @@
     </div>
   {/each}
 {/if}
-
-<style>
-  .unit {
-    margin-top: 2rem;
-  }
-
-  .source {
-    margin-bottom: 0.5rem;
-  }
-
-  .error {
-    color: red;
-    margin-bottom: 1rem;
-  }
-
-  textarea {
-    width: 100%;
-    min-height: 60px;
-    font-size: 1rem;
-    padding: 0.5rem;
-  }
-</style>

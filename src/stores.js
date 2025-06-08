@@ -1,15 +1,32 @@
 import { writable } from 'svelte/store';
 
 /**
- * Persistent store with localStorage sync
+ * Persistent store with localStorage sync and fallback mechanism
  */
 function persistentStore(key, initial) {
-  const stored = localStorage.getItem(key);
+  let stored;
+  let isLocalStorageAvailable = true;
+
+  try {
+    stored = localStorage.getItem(key);
+  } catch (error) {
+    console.warn(`localStorage unavailable for key "${key}":`, error);
+    stored = null; // Fallback if localStorage is unavailable
+    isLocalStorageAvailable = false;
+  }
+
   const store = writable(stored ?? initial);
 
   store.subscribe(value => {
-    if (value !== undefined && value !== null) {
-      localStorage.setItem(key, value);
+    if (isLocalStorageAvailable) {
+      try {
+        if (value !== undefined && value !== null) {
+          localStorage.setItem(key, value);
+        }
+      } catch (error) {
+        console.error(`Failed to save "${key}" to localStorage:`, error);
+        isLocalStorageAvailable = false; // Disable further localStorage attempts
+      }
     }
   });
 

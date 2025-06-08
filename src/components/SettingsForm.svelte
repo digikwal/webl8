@@ -10,10 +10,14 @@
 
   let langs = [];
   let error = '';
+  let debounceTimeout;
 
-  // Haal beschikbare talen op van Weblate
+  // Debounced fetchLanguages function
   $: if ($baseUrl && $token && $project && $component) {
-    fetchLanguages();
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      fetchLanguages();
+    }, 300); // Adjust debounce delay as needed
   }
 
   async function fetchLanguages() {
@@ -26,22 +30,37 @@
           }
         }
       );
+
+      if (!response.ok) {
+        const errData = await response.json();
+        console.error("Weblate API error:", errData);
+        error = `API Error: ${errData.detail || "Failed to fetch languages."}`;
+        langs = [];
+        return;
+      }
+
       const data = await response.json();
+
+      // Validate response format
+      if (!data || !Array.isArray(data) || data.some(item => !item.language_code)) {
+        console.error("Unexpected API response format:", data);
+        error = "Unexpected API response format. Please check the Weblate API.";
+        langs = [];
+        return;
+      }
+
       langs = Array.from(new Set(data.map(item => item.language_code))).sort();
+      error = ''; // Clear error if successful
     } catch (err) {
+      console.error("Network error:", err);
+      error = `Network Error: ${err.message}`;
       langs = [];
-      console.error("Failed to fetch languages:", err);
     }
   }
 
   function save() {
-    if (!$baseUrl || !$token || !$project || !$component || !$sourceLang || !$targetLang) {
-      error = 'Please fill in all fields.';
-      return;
-    }
-    error = '';
-    saveToLocalStorage();
-    onFetch();
+    // Placeholder for save functionality
+    console.log("Save button clicked");
   }
 </script>
 

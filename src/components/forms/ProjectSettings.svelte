@@ -25,7 +25,7 @@
       ...s,
       apiToken: localToken.trim(),
       sourceLang: localSource.trim(),
-      targetLang: localTarget.trim()
+      targetLang: localTarget.trim(),
     }));
 
     dispatch('update');

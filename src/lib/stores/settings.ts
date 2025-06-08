@@ -11,7 +11,7 @@ const defaultSettings: Settings = {
   apiToken: '',
   sourceLang: 'en',
   targetLang: 'nl',
-  selectedProject: ''
+  selectedProject: '',
 };
 
 export const settings = writable<Settings>({ ...defaultSettings });

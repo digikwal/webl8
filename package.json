@@ -1,34 +1,40 @@
 {
-    "name": "webl8",
-    "version": "1.0.0",
-    "description": "A lightweight Weblate translation assistant built with SvelteKit and Vite.",
-    "author": "Digikwal",
-    "license": "MIT",
-    "private": true,
-    "homepage": "https://digikwal.github.io/webl8",
-    "type": "module",
-    "scripts": {
-      "dev": "vite",
-      "build": "vite build",
-      "preview": "vite preview",
-      "lint": "eslint src --ext .svelte,.ts",
-      "format": "prettier --write .",
-      "format:check": "prettier --check .",
-      "typecheck": "tsc --noEmit"
-    },
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/digikwal/webl8.git"
-    },
-    "devDependencies": {
-      "@sveltejs/vite-plugin-svelte": "^5.1.0",
-      "eslint": "^8.57.0",
-      "eslint-plugin-svelte": "^2.34.0",
-      "prettier": "^3.3.1",
-      "svelte": "^5.0.0",
-      "svelte-check": "^3.6.6",
-      "typescript": "^5.4.5",
-      "vite": "^6.0.0"
-    }
+  "name": "webl8",
+  "version": "1.0.0",
+  "description": "A lightweight Weblate translation assistant built with SvelteKit and Vite.",
+  "author": "Digikwal",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://digikwal.github.io/webl8",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "check": "npm run lint && npm run format:check && npm run typecheck",
+    "dev": "vite",
+    "fix": "prettier --write . && eslint src --ext .svelte,.ts --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint src --ext .svelte,.ts",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digikwal/webl8.git"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.1.0",
+    "@tsconfig/svelte": "^5.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
+    "@typescript-eslint/parser": "^8.33.1",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-svelte": "^3.9.1",
+    "prettier": "^3.3.1",
+    "prettier-plugin-svelte": "^3.0.0",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.2.1",
+    "typescript": "^5.5.0",
+    "vite": "^6.3.5"
   }
-  
+}

@@ -23,4 +23,6 @@ export default defineConfig({
     port: 4173,
     strictPort: true,
   },
+
+  base: '/webl8/',
 });

@@ -15,6 +15,14 @@
     fetchError = '';
     loading.set(true);
 
+    console.log('Fetching strings with parameters:', {
+      baseUrl: $baseUrl,
+      token: $token,
+      project: $project,
+      component: $component,
+      targetLang: $targetLang
+    });
+
     const { data, error } = await fetchStrings({
       baseUrl: $baseUrl,
       token: $token,
@@ -23,20 +31,27 @@
       targetLang: $targetLang
     });
 
+    console.log('Fetch result:', { data, error });
+
     if (error) {
       fetchError = error;
       results.set([]);
+      console.error('Fetch error:', error);
     } else {
       results.set(data);
+      console.log('Results updated:', data);
       if (data.length === 0) {
         fetchError = 'No untranslated strings found.';
+        console.warn(fetchError);
       }
     }
 
     loading.set(false);
+    console.log('Loading state set to false');
   }
 
   function toggleTheme() {
+    console.log('Toggling theme. Current mode:', $darkMode ? 'dark' : 'light');
     darkMode.update(v => !v);
   }
 </script>

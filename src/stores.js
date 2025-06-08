@@ -1,39 +1,38 @@
 import { writable } from 'svelte/store';
 
 /**
- * Persistent store with localStorage sync and fallback mechanism
+ * Create a writable store synced with localStorage, with fallback for restricted environments.
  */
 function persistentStore(key, initial) {
-  let stored;
   let isLocalStorageAvailable = true;
 
-  try {
-    stored = localStorage.getItem(key);
-  } catch (error) {
-    console.warn(`localStorage unavailable for key "${key}":`, error);
-    stored = null; // Fallback if localStorage is unavailable
-    isLocalStorageAvailable = false;
-  }
+  const read = () => {
+    try {
+      const value = localStorage.getItem(key);
+      return value !== null ? value : initial;
+    } catch (err) {
+      console.warn(`⚠️ Cannot read localStorage key "${key}":`, err);
+      isLocalStorageAvailable = false;
+      return initial;
+    }
+  };
 
-  const store = writable(stored ?? initial);
+  const store = writable(read());
 
   store.subscribe(value => {
-    if (isLocalStorageAvailable) {
-      try {
-        if (value !== undefined && value !== null) {
-          localStorage.setItem(key, value);
-        }
-      } catch (error) {
-        console.error(`Failed to save "${key}" to localStorage:`, error);
-        isLocalStorageAvailable = false; // Disable further localStorage attempts
-      }
+    if (!isLocalStorageAvailable) return;
+    try {
+      localStorage.setItem(key, value);
+    } catch (err) {
+      console.error(`❌ Failed to write "${key}" to localStorage:`, err);
+      isLocalStorageAvailable = false;
     }
   });
 
   return store;
 }
 
-// Persistent fields
+// Persistent Weblate settings
 export const baseUrl     = persistentStore('baseUrl', '');
 export const token       = persistentStore('token', '');
 export const project     = persistentStore('project', '');
@@ -41,16 +40,18 @@ export const component   = persistentStore('component', '');
 export const sourceLang  = persistentStore('sourceLang', '');
 export const targetLang  = persistentStore('targetLang', '');
 
-// UI-only (non-persistent) state
+// UI-only runtime state
 export const darkMode = writable(false);
 export const loading  = writable(false);
 export const results  = writable([]);
 
-// Function to save a value to localStorage directly
+/**
+ * Utility to manually write to localStorage (not linked to a store)
+ */
 export function saveToLocalStorage(key, value) {
   try {
     localStorage.setItem(key, value);
-  } catch (error) {
-    console.error(`Failed to save "${key}" to localStorage:`, error);
+  } catch (err) {
+    console.error(`❌ Failed to save "${key}" manually:`, err);
   }
 }

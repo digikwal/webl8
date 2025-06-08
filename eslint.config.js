@@ -1,21 +1,48 @@
-// ./eslint.config.js
+// eslint.config.js
 import parserTs from '@typescript-eslint/parser';
 import pluginTs from '@typescript-eslint/eslint-plugin';
 import svelteParser from 'svelte-eslint-parser';
 import sveltePlugin from 'eslint-plugin-svelte';
 import prettier from 'eslint-config-prettier';
 
-/** @type {import('eslint').Linter.Config[]} */
+/** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
+  // JavaScript support
+  {
+    files: ['src/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        fetch: 'readonly',
+        localStorage: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly'
+      }
+    },
+    rules: {
+      'no-unused-vars': 'warn',
+      'no-undef': 'error'
+    }
+  },
+
   // TypeScript support
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
     languageOptions: {
       parser: parserTs,
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
         project: './tsconfig.json'
+      },
+      globals: {
+        fetch: 'readonly',
+        localStorage: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly'
       }
     },
     plugins: {
@@ -28,7 +55,7 @@ export default [
 
   // Svelte support
   {
-    files: ['**/*.svelte'],
+    files: ['src/**/*.svelte'],
     languageOptions: {
       parser: svelteParser,
       parserOptions: {
@@ -36,6 +63,13 @@ export default [
         ecmaVersion: 'latest',
         sourceType: 'module',
         extraFileExtensions: ['.svelte']
+      },
+      globals: {
+        fetch: 'readonly',
+        localStorage: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly'
       }
     },
     plugins: {
@@ -59,6 +93,6 @@ export default [
     ]
   },
 
-  // Prettier override
+  // Prettier overrides last
   prettier
 ];

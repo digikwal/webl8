@@ -1,4 +1,9 @@
+// .vscode/settings.json
 {
-    "eslint.experimental.useFlatConfig": true
-  }
-  
+  "eslint.validate": ["svelte", "typescript", "javascript"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "editor.formatOnSave": true,
+  "eslint.experimental.useFlatConfig": true // only needed in VS Code < 3.0.10
+}

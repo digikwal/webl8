@@ -1,4 +1,5 @@
-import adapter from '@sveltejs/adapter-auto';
+// ./svelte.config.js
+import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import path from 'path';
 
@@ -8,7 +9,9 @@ const config = {
 
   kit: {
     adapter: adapter(),
-
+    paths: {
+      base: '/webl8' // pas aan als je repo anders heet
+    },
     alias: {
       $lib: path.resolve('src/lib'),
       $components: path.resolve('src/lib/components'),

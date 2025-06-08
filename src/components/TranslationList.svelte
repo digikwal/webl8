@@ -1,5 +1,31 @@
 <script>
-  import { baseUrl, token, results } from '../stores.js';
+  import { fetchStrings } from '../lib/api';
+  import { baseUrl, token, project, component, targetLang, results, loading } from '../stores.js';
+
+  let errorMessage = '';
+
+  async function loadStrings() {
+    loading.set(true);
+    const { data, error } = await fetchStrings({
+      baseUrl: $baseUrl,
+      token: $token,
+      project: $project,
+      component: $component,
+      targetLang: $targetLang
+    });
+
+    if (error) {
+      errorMessage = error; // Display error in the UI
+      results.set([]);
+    } else {
+      results.set(data); // Update the store with fetched strings
+    }
+    loading.set(false);
+  }
+
+  $: if ($baseUrl && $token && $project && $component && $targetLang) {
+    loadStrings();
+  }
 
   async function submitTranslation(id, text) {
     if (!text || text.trim().length === 0) {
@@ -27,6 +53,10 @@
   }
 </script>
 
+{#if errorMessage}
+  <div class="error">Error: {errorMessage}</div>
+{/if}
+
 {#if $results.length === 0}
   <p>No untranslated strings found.</p>
 {:else}
@@ -48,6 +78,11 @@
 
   .source {
     margin-bottom: 0.5rem;
+  }
+
+  .error {
+    color: red;
+    margin-bottom: 1rem;
   }
 
   textarea {

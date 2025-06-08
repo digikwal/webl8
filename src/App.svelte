@@ -1,57 +1,15 @@
 <script>
   import SettingsForm from './components/SettingsForm.svelte';
   import TranslationList from './components/TranslationList.svelte';
-  import { fetchStrings } from './lib/api.js';
+  import { darkMode } from './stores.js';
 
-  import {
-    baseUrl, token, project, component,
-    targetLang, results, loading, darkMode
-  } from './stores.js';
+  let translationListRef;
 
-  let fetchError = '';
-
-  // Fetch untranslated strings using current store values
-  async function getStrings() {
-    fetchError = '';
-    loading.set(true);
-
-    console.log('Fetching strings with parameters:', {
-      baseUrl: $baseUrl,
-      token: $token,
-      project: $project,
-      component: $component,
-      targetLang: $targetLang
-    });
-
-    const { data, error } = await fetchStrings({
-      baseUrl: $baseUrl,
-      token: $token,
-      project: $project,
-      component: $component,
-      targetLang: $targetLang
-    });
-
-    console.log('Fetch result:', { data, error });
-
-    if (error) {
-      fetchError = error;
-      results.set([]);
-      console.error('Fetch error:', error);
-    } else {
-      results.set(data);
-      console.log('Results updated:', data);
-      if (data.length === 0) {
-        fetchError = 'No untranslated strings found.';
-        console.warn(fetchError);
-      }
-    }
-
-    loading.set(false);
-    console.log('Loading state set to false');
+  function handleFetch() {
+    translationListRef?.loadStrings();
   }
 
   function toggleTheme() {
-    console.log('Toggling theme. Current mode:', $darkMode ? 'dark' : 'light');
     darkMode.update(v => !v);
   }
 </script>
@@ -66,15 +24,11 @@
 
   <main>
     <section class="form-section">
-      <SettingsForm onFetch={getStrings} />
+      <SettingsForm onFetch={handleFetch} />
     </section>
 
-    {#if fetchError}
-      <div class="error">{fetchError}</div>
-    {/if}
-
     <section class="translations">
-      <TranslationList />
+      <TranslationList bind:this={translationListRef} />
     </section>
   </main>
 </div>

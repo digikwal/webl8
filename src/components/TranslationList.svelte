@@ -1,35 +1,24 @@
 <script>
-  import { onDestroy } from 'svelte';
-  import { fetchStrings } from '../lib/api';
+  import { onDestroy, onMount, createEventDispatcher } from 'svelte';
   import {
-    baseUrl, token, project, component,
-    targetLang, results, loading
+    baseUrl, token, targetLang,
+    results, loading
   } from '../stores.js';
+  import { fetchStrings } from '../lib/api';
 
   let errorMessage = '';
-  let debounce;
+  const dispatch = createEventDispatcher();
 
-  // Reactive trigger for loading strings
-  $: {
-    if ($baseUrl && $token && $project && $component && $targetLang) {
-      clearTimeout(debounce);
-      debounce = setTimeout(loadStrings, 300);
-    }
-  }
-
-  onDestroy(() => {
-    clearTimeout(debounce);
-  });
-
-  async function loadStrings() {
+  // This function can be called externally via bind:this
+  export let loadStrings = async () => {
     errorMessage = '';
     loading.set(true);
 
     const { data, error } = await fetchStrings({
       baseUrl: $baseUrl,
       token: $token,
-      project: $project,
-      component: $component,
+      project: globalThis.$project,
+      component: globalThis.$component,
       targetLang: $targetLang
     });
 
@@ -41,14 +30,11 @@
     }
 
     loading.set(false);
-  }
+  };
 
   async function submitTranslation(id, text) {
     const cleaned = text.trim();
-    if (!cleaned) {
-      console.warn("⚠ Empty translation skipped");
-      return;
-    }
+    if (!cleaned) return;
 
     try {
       const res = await fetch(`${$baseUrl}/units/${id}/`, {
@@ -66,6 +52,7 @@
         alert(`❌ Submission failed: ${errData.detail || res.status}`);
       } else {
         console.log(`✅ Submitted translation for ID ${id}`);
+        dispatch('submitted', { id }); // optional if you want parent to react
       }
     } catch (err) {
       console.error('⚠ Error submitting:', err);
@@ -93,26 +80,3 @@
     </div>
   {/each}
 {/if}
-
-<style>
-  .unit {
-    margin-top: 2rem;
-  }
-
-  .source {
-    margin-bottom: 0.5rem;
-  }
-
-  .error {
-    color: red;
-    margin-bottom: 1rem;
-  }
-
-  textarea {
-    width: 100%;
-    min-height: 60px;
-    font-size: 1rem;
-    padding: 0.5rem;
-    box-sizing: border-box;
-  }
-</style>

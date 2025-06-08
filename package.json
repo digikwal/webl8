@@ -1,24 +1,34 @@
 {
-  "name": "webl8",
-  "version": "1.0.0",
-  "description": "A lightweight Weblate translation assistant built with Svelte and Vite.",
-  "author": "Digikwal",
-  "license": "MIT",
-  "private": true,
-  "homepage": "https://digikwal.github.io/webl8",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/digikwal/webl8.git"
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^5.1.0",
-    "svelte": "^5.0.0",
-    "vite": "^6.0.0"
+    "name": "webl8",
+    "version": "1.0.0",
+    "description": "A lightweight Weblate translation assistant built with SvelteKit and Vite.",
+    "author": "Digikwal",
+    "license": "MIT",
+    "private": true,
+    "homepage": "https://digikwal.github.io/webl8",
+    "type": "module",
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "preview": "vite preview",
+      "lint": "eslint src --ext .svelte,.ts",
+      "format": "prettier --write .",
+      "format:check": "prettier --check .",
+      "typecheck": "tsc --noEmit"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/digikwal/webl8.git"
+    },
+    "devDependencies": {
+      "@sveltejs/vite-plugin-svelte": "^5.1.0",
+      "eslint": "^8.57.0",
+      "eslint-plugin-svelte": "^2.34.0",
+      "prettier": "^3.3.1",
+      "svelte": "^5.0.0",
+      "svelte-check": "^3.6.6",
+      "typescript": "^5.4.5",
+      "vite": "^6.0.0"
+    }
   }
-}
+  

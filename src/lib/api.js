@@ -9,13 +9,13 @@ export async function fetchStrings({ baseUrl, token, project, component, targetL
     if (!res.ok) {
       const err = await res.json();
       console.error("Weblate API error:", err);
-      return [];
+      return { data: [], error: `API Error: ${err.detail || "Failed to fetch strings."}` };
     }
 
     const data = await res.json();
-    return data.results || [];
+    return { data: data.results || [], error: null };
   } catch (err) {
     console.error("Network/API error:", err);
-    return [];
+    return { data: [], error: `Network Error: ${err.message}` };
   }
 }

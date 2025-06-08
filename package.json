@@ -16,7 +16,7 @@
     "build": "vite build",
     "preview": "vite preview",
 
-    "lint": "eslint src --ext .svelte,.ts",
+    "lint": "eslint src --ext .svelte,.ts,.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "fix": "npm run format && npm run lint -- --fix",

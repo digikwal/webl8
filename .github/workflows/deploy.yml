@@ -1,4 +1,4 @@
-name: Deploy site to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -14,18 +14,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
 
-      - run: npm install
-      - run: npm run build
+      - name: 📦 Install dependencies
+        run: npm ci
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: 🧹 Lint check
+        run: npm run lint
+
+      - name: 🔎 Format check
+        run: npm run format:check
+
+      - name: 🧠 Type check
+        run: npm run typecheck
+
+      - name: 🛠️ Build site
+        run: npm run build
+
+      - name: 📤 Upload build artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: dist
 
   deploy:
     needs: build
@@ -35,5 +51,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - uses: actions/deploy-pages@v4
+      - name: 🚀 Deploy to GitHub Pages
         id: deployment
+        uses: actions/deploy-pages@v4

@@ -8,13 +8,13 @@ const config = {
       pages: 'dist',
       assets: 'dist',
       fallback: null,
-      precompress: false
+      precompress: false,
     }),
     paths: {
-      base: '/webl8'
-    }
+      base: '/webl8',
+    },
   },
-  preprocess: vitePreprocess()
+  preprocess: vitePreprocess(),
 };
 
 export default config;

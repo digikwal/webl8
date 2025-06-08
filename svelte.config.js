@@ -1,6 +1,6 @@
 // ./svelte.config.js
 import adapter from '@sveltejs/adapter-static';
-import { vitePreprocess } from 'svelte';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
 /** @type {import('@sveltejs/kit').Config} */

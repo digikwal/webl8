@@ -55,19 +55,52 @@ button:hover {
   background: #0056b3;
 }
 
-/* Add these styles */
-input, textarea, select {
-  width: 100%;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+.app {
+  font-family: var(--font-body);
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  transition: background var(--transition-speed), color var(--transition-speed);
 }
 
-.dark {
-  --bg: #121212;
-  --text: #eee;
+.dark .app {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
 }
 
-.light {
-  --bg: #fff;
-  --text: #000;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--text-light);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border var(--transition-speed);
+}
+
+.dark .theme-toggle {
+  border: 1px solid var(--text-dark);
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.error {
+  color: red;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
 }

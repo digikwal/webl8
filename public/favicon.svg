@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <style>
+    :root {
+      --bg: white;
+      --stroke: black;
+      --text: black;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000;
+        --stroke: white;
+        --text: white;
+      }
+    }
+  </style>
+  <rect x="4" y="4" width="56" height="56" rx="12" stroke="var(--stroke)" stroke-width="4" fill="var(--bg)" />
+  <text x="32" y="42" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="var(--text)">we</text>
+</svg>

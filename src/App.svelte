@@ -13,25 +13,26 @@
   async function getStrings() {
     loading.set(true);
     fetchError = '';
-    try {
-      const res = await fetchStrings({
-        baseUrl: $baseUrl,
-        token: $token,
-        project: $project,
-        component: $component,
-        targetLang: $targetLang
-      });
-      results.set(res);
-      if (!res.length) {
+
+    const { data, error } = await fetchStrings({
+      baseUrl: $baseUrl,
+      token: $token,
+      project: $project,
+      component: $component,
+      targetLang: $targetLang
+    });
+
+    if (error) {
+      fetchError = error;
+      results.set([]);
+    } else {
+      results.set(data);
+      if (data.length === 0) {
         fetchError = 'No untranslated strings found.';
       }
-    } catch (err) {
-      fetchError = 'Failed to fetch strings.';
-      console.error(err);
-      results.set([]);
-    } finally {
-      loading.set(false);
     }
+
+    loading.set(false);
   }
 
   function toggleTheme() {

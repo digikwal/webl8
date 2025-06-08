@@ -7,27 +7,29 @@
   "private": true,
   "homepage": "https://digikwal.github.io/webl8",
   "type": "module",
-  "scripts": {
-    "build": "vite build",
-    "check": "npm run lint && npm run format:check && npm run typecheck",
-    "dev": "vite",
-    "fix": "prettier --write . && eslint src --ext .svelte,.ts --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "lint": "eslint src --ext .svelte,.ts",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/digikwal/webl8.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+
+    "lint": "eslint src --ext .svelte,.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "fix": "npm run format && npm run lint -- --fix",
+
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run format:check && npm run typecheck"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.1.0",
     "@tsconfig/svelte": "^5.0.4",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
-    "eslint": "^9.28.0",
+    "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^3.9.1",
     "prettier": "^3.3.1",

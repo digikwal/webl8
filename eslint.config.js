@@ -1,11 +1,13 @@
+// ./eslint.config.js
 import parserTs from '@typescript-eslint/parser';
 import pluginTs from '@typescript-eslint/eslint-plugin';
-import sveltePlugin from 'eslint-plugin-svelte';
 import svelteParser from 'svelte-eslint-parser';
+import sveltePlugin from 'eslint-plugin-svelte';
 import prettier from 'eslint-config-prettier';
 
-/** @type {import("eslint").ConfigData[]} */
+/** @type {import('eslint').Linter.Config[]} */
 export default [
+  // TypeScript support
   {
     files: ['**/*.ts'],
     languageOptions: {
@@ -13,36 +15,50 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: './tsconfig.json',
-      },
+        project: './tsconfig.json'
+      }
     },
     plugins: {
-      '@typescript-eslint': pluginTs,
+      '@typescript-eslint': pluginTs
     },
     rules: {
-      ...pluginTs.configs.recommended.rules,
-    },
+      ...pluginTs.configs.recommended.rules
+    }
   },
+
+  // Svelte support
   {
     files: ['**/*.svelte'],
     languageOptions: {
       parser: svelteParser,
       parserOptions: {
         parser: parserTs,
-        extraFileExtensions: ['.svelte'],
         ecmaVersion: 'latest',
         sourceType: 'module',
-      },
+        extraFileExtensions: ['.svelte']
+      }
     },
     plugins: {
-      svelte: sveltePlugin,
+      svelte: sveltePlugin
     },
+    processor: sveltePlugin.processors.svelte,
     rules: {
-      ...sveltePlugin.configs.recommended.rules,
-    },
+      ...sveltePlugin.configs.recommended.rules
+    }
   },
+
+  // Ignore build outputs
   {
-    ignores: ['node_modules', 'dist', 'build'],
+    ignores: [
+      'node_modules/',
+      'dist/',
+      'build/',
+      '.svelte-kit/',
+      '.vercel/',
+      '.netlify/'
+    ]
   },
-  prettier,
+
+  // Prettier override
+  prettier
 ];

@@ -1,18 +1,21 @@
-// vite.config.js
+import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 export default defineConfig({
-  base: '/webl8', // Required for GitHub Pages
-  plugins: [svelte()],
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true,
+  plugins: [sveltekit()],
+  server: {
+    port: 5173,
+    strictPort: true
+  },
+  preview: {
+    port: 4173,
+    strictPort: true
   },
   resolve: {
     alias: {
-      $components: '/src/components',
       $lib: '/src/lib',
-    },
-  },
+      $components: '/src/lib/components',
+      $routes: '/src/routes'
+    }
+  }
 });

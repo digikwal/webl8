@@ -4,15 +4,22 @@
 
   let localAccepted = [];
 
+  // Keep local state in sync with store
+  $: localAccepted = $acceptedTranslations;
+
+  function upsertTranslation(id, translation) {
+    return [...localAccepted.filter((t) => t.id !== id), { id, translation }];
+  }
+
   function handleAccept(event) {
     const { id, translation } = event.detail;
-    localAccepted = [...localAccepted.filter(t => t.id !== id), { id, translation }];
+    localAccepted = upsertTranslation(id, translation);
     acceptedTranslations.set(localAccepted);
   }
 
   function handleReject(event) {
     const { id } = event.detail;
-    localAccepted = localAccepted.filter(t => t.id !== id);
+    localAccepted = localAccepted.filter((t) => t.id !== id);
     acceptedTranslations.set(localAccepted);
   }
 </script>
@@ -22,9 +29,7 @@
   <p>Click <strong>Accept</strong> or <strong>Reject</strong> for each proposed translation.</p>
 
   {#each $proposedTranslations as item (item.id)}
-    <TranslationCard {item}
-      on:accept={handleAccept}
-      on:reject={handleReject} />
+    <TranslationCard {item} on:accept={handleAccept} on:reject={handleReject} />
   {/each}
 
   <p class="summary">

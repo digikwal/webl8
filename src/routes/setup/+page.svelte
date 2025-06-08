@@ -6,7 +6,7 @@
     sourceLang,
     targetLang,
     availableSources,
-    availableTargets
+    availableTargets,
   } from '$lib/stores.js';
 
   const dispatch = createEventDispatcher();
@@ -32,13 +32,12 @@
 
     const response = await fetch('/setup', {
       method: 'POST',
-      body: formData
+      body: formData,
     });
 
     const result = await response.json();
 
     if (result.success) {
-      // Update all stores centrally
       token.set(localToken);
       project.set(localProject);
       sourceLang.set(result.data.source_lang);
@@ -66,23 +65,27 @@
     <input name="project" type="text" bind:value={localProject} required />
   </label>
 
-  <label>
-    Source Language
-    <select bind:value={$sourceLang}>
-      {#each $availableSources as lang}
-        <option value={lang}>{lang}</option>
-      {/each}
-    </select>
-  </label>
+  {#if $availableSources.length}
+    <label>
+      Source Language
+      <select bind:value={$sourceLang}>
+        {#each $availableSources as lang}
+          <option value={lang}>{lang}</option>
+        {/each}
+      </select>
+    </label>
+  {/if}
 
-  <label>
-    Target Language
-    <select bind:value={$targetLang}>
-      {#each $availableTargets as lang}
-        <option value={lang}>{lang}</option>
-      {/each}
-    </select>
-  </label>
+  {#if $availableTargets.length}
+    <label>
+      Target Language
+      <select bind:value={$targetLang}>
+        {#each $availableTargets as lang}
+          <option value={lang}>{lang}</option>
+        {/each}
+      </select>
+    </label>
+  {/if}
 
   <button type="submit">Fetch</button>
 

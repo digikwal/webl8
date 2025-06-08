@@ -24,8 +24,8 @@ export const actions = {
         name: data.name,
         slug: data.slug,
         source_lang: data.source_language,
-        target_langs: data.translations.map(t => t.language_code)
-      }
+        target_langs: data.translations.map((t) => t.language_code),
+      },
     };
-  }
+  },
 };

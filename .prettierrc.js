@@ -22,20 +22,20 @@ export default {
     {
       files: '*.svelte',
       options: {
-        parser: 'svelte'
-      }
+        parser: 'svelte',
+      },
     },
     {
       files: '*.md',
       options: {
-        proseWrap: 'always'
-      }
+        proseWrap: 'always',
+      },
     },
     {
       files: ['*.yml', '*.yaml'],
       options: {
-        tabWidth: 2
-      }
-    }
-  ]
+        tabWidth: 2,
+      },
+    },
+  ],
 };

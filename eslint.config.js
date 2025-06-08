@@ -18,13 +18,13 @@ export default [
         localStorage: 'readonly',
         window: 'readonly',
         document: 'readonly',
-        navigator: 'readonly'
-      }
+        navigator: 'readonly',
+      },
     },
     rules: {
       'no-unused-vars': 'warn',
-      'no-undef': 'error'
-    }
+      'no-undef': 'error',
+    },
   },
 
   // TypeScript support
@@ -35,22 +35,22 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: './tsconfig.json'
+        project: './tsconfig.json',
       },
       globals: {
         fetch: 'readonly',
         localStorage: 'readonly',
         window: 'readonly',
         document: 'readonly',
-        navigator: 'readonly'
-      }
+        navigator: 'readonly',
+      },
     },
     plugins: {
-      '@typescript-eslint': pluginTs
+      '@typescript-eslint': pluginTs,
     },
     rules: {
-      ...pluginTs.configs.recommended.rules
-    }
+      ...pluginTs.configs.recommended.rules,
+    },
   },
 
   // Svelte support
@@ -62,37 +62,30 @@ export default [
         parser: parserTs,
         ecmaVersion: 'latest',
         sourceType: 'module',
-        extraFileExtensions: ['.svelte']
+        extraFileExtensions: ['.svelte'],
       },
       globals: {
         fetch: 'readonly',
         localStorage: 'readonly',
         window: 'readonly',
         document: 'readonly',
-        navigator: 'readonly'
-      }
+        navigator: 'readonly',
+      },
     },
     plugins: {
-      svelte: sveltePlugin
+      svelte: sveltePlugin,
     },
     processor: sveltePlugin.processors.svelte,
     rules: {
-      ...sveltePlugin.configs.recommended.rules
-    }
+      ...sveltePlugin.configs.recommended.rules,
+    },
   },
 
   // Ignore build outputs
   {
-    ignores: [
-      'node_modules/',
-      'dist/',
-      'build/',
-      '.svelte-kit/',
-      '.vercel/',
-      '.netlify/'
-    ]
+    ignores: ['node_modules/', 'dist/', 'build/', '.svelte-kit/', '.vercel/', '.netlify/'],
   },
 
   // Prettier overrides last
-  prettier
+  prettier,
 ];

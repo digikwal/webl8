@@ -7,7 +7,7 @@ function isBrowser() {
 
 function persist(key, defaultValue) {
   const initial = isBrowser()
-    ? JSON.parse(localStorage.getItem(key) ?? 'null') ?? defaultValue
+    ? (JSON.parse(localStorage.getItem(key) ?? 'null') ?? defaultValue)
     : defaultValue;
 
   const store = writable(initial);

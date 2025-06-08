@@ -22,5 +22,5 @@ export const actions = {
     }
 
     return { success: true, count: data.length };
-  }
+  },
 };

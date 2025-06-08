@@ -10,17 +10,17 @@ export default defineConfig({
     alias: {
       $lib: path.resolve('./src/lib'),
       $components: path.resolve('./src/lib/components'),
-      $routes: path.resolve('./src/routes')
-    }
+      $routes: path.resolve('./src/routes'),
+    },
   },
 
   server: {
     port: 5173,
-    strictPort: true
+    strictPort: true,
   },
 
   preview: {
     port: 4173,
-    strictPort: true
-  }
+    strictPort: true,
+  },
 });

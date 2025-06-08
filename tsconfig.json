@@ -1,11 +1,8 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
+  "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
     "target": "ES2023",
-    "lib": [
-      "ES2023",
-      "DOM"
-    ],
+    "lib": ["ES2023", "DOM"],
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,17 +11,8 @@
     "skipLibCheck": true,
     "allowJs": true,
     "checkJs": false,
-    "types": [
-      "svelte",
-      "vite/client"
-    ]
+    "types": ["svelte", "vite/client"]
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "build"]
 }

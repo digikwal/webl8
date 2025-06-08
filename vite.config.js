@@ -5,7 +5,6 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [sveltekit()],
-
   resolve: {
     alias: {
       $lib: path.resolve('./src/lib'),
@@ -13,16 +12,12 @@ export default defineConfig({
       $routes: path.resolve('./src/routes'),
     },
   },
-
   server: {
     port: 5173,
     strictPort: true,
   },
-
   preview: {
     port: 4173,
     strictPort: true,
   },
-
-  base: '/webl8/',
 });

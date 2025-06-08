@@ -12,6 +12,7 @@
     "url": "https://github.com/digikwal/webl8.git"
   },
   "scripts": {
+    "prepare": "node scripts/prepare-kit-tsconfig.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",

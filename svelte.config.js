@@ -10,14 +10,14 @@ const config = {
   kit: {
     adapter: adapter(),
     paths: {
-      base: '/webl8' // pas aan als je repo anders heet
+      base: '/webl8', // pas aan als je repo anders heet
     },
     alias: {
       $lib: path.resolve('src/lib'),
       $components: path.resolve('src/lib/components'),
-      $routes: path.resolve('src/routes')
-    }
-  }
+      $routes: path.resolve('src/routes'),
+    },
+  },
 };
 
 export default config;

@@ -7,8 +7,8 @@ export async function fetchWeblateProject({ token, project }) {
   try {
     const res = await fetch(`https://hosted.weblate.org/api/projects/${project}/`, {
       headers: {
-        Authorization: `Token ${token}`
-      }
+        Authorization: `Token ${token}`,
+      },
     });
 
     if (!res.ok) {
@@ -29,8 +29,8 @@ export async function getSourceStrings({ token, component }) {
       `https://hosted.weblate.org/api/components/${component}/units/?q=translated=no`,
       {
         headers: {
-          Authorization: `Token ${token}`
-        }
+          Authorization: `Token ${token}`,
+        },
       }
     );
 
@@ -44,7 +44,7 @@ export async function getSourceStrings({ token, component }) {
       id: unit.id,
       source: unit.source,
       context: unit.context,
-      location: unit.location
+      location: unit.location,
     }));
 
     return { data: strings, error: null };
@@ -67,9 +67,9 @@ export async function translateStringsViaAI({ sourceLang, targetLang, strings })
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${apiKey}`
+            Authorization: `Bearer ${apiKey}`,
           },
-          body: JSON.stringify({ prompt })
+          body: JSON.stringify({ prompt }),
         });
 
         const json = await res.json();
@@ -77,7 +77,7 @@ export async function translateStringsViaAI({ sourceLang, targetLang, strings })
         return {
           id: item.id,
           source: item.source,
-          translation: json.translation || '(untranslated)'
+          translation: json.translation || '(untranslated)',
         };
       })
     );
@@ -98,9 +98,9 @@ export async function pushTranslationsToWeblate({ token, translations }) {
         method: 'PATCH',
         headers: {
           Authorization: `Token ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ translation: t.translation })
+        body: JSON.stringify({ translation: t.translation }),
       });
 
       if (!res.ok) {

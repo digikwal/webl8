@@ -12,30 +12,28 @@ export default {
 
   // ✨ Svelte support
   plugins: ['prettier-plugin-svelte'],
-  pluginSearchDirs: ['.'], // Prevents Prettier v3 plugin resolution issues
   svelteSortOrder: 'options-scripts-markup-styles',
   svelteStrictMode: false,
-  svelteBracketNewLine: true,
   svelteAllowShorthand: true,
 
   overrides: [
     {
       files: '*.svelte',
       options: {
-        parser: 'svelte'
-      }
+        parser: 'svelte',
+      },
     },
     {
       files: '*.md',
       options: {
-        proseWrap: 'always'
-      }
+        proseWrap: 'always',
+      },
     },
     {
       files: ['*.yml', '*.yaml'],
       options: {
-        tabWidth: 2
-      }
-    }
-  ]
+        tabWidth: 2,
+      },
+    },
+  ],
 };

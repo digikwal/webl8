@@ -1,76 +1,70 @@
 <script>
+  import { onDestroy } from 'svelte';
   import {
     baseUrl, token, project, component,
     sourceLang, targetLang, loading, darkMode
   } from '../stores.js';
 
-  export let onFetch;
-  export let onToggleTheme;
+  export let onFetch = () => {};
+  export let onToggleTheme = () => {};
 
   let langs = [];
   let error = '';
   let debounceTimeout;
 
-  // Debounced fetchLanguages function
+  // Debounced effect for API call
   $: if ($baseUrl && $token && $project && $component) {
     clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-      fetchLanguages();
-    }, 300); // Adjust debounce delay as needed
+    debounceTimeout = setTimeout(fetchLanguages, 300);
   }
+
+  onDestroy(() => {
+    clearTimeout(debounceTimeout);
+  });
 
   async function fetchLanguages() {
     try {
-      const response = await fetch(
-        `${$baseUrl}/translations/${$project}/${$component}/`,
-        {
-          headers: {
-            Authorization: `Token ${$token}`
-          }
+      const url = `${$baseUrl}/translations/${$project}/${$component}/`;
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Token ${$token}`
         }
-      );
+      });
 
-      if (!response.ok) {
-        const errData = await response.json();
-        console.error("Weblate API error:", errData);
-        error = `API Error: ${errData.detail || "Failed to fetch languages."}`;
-        langs = [];
-        return;
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Failed to fetch languages.');
 
-      const data = await response.json();
+      if (!Array.isArray(data)) throw new Error('Unexpected API response format.');
 
-      // Validate response format
-      if (!data || !Array.isArray(data) || data.some(item => !item.language_code)) {
-        console.error("Unexpected API response format:", data);
-        error = "Unexpected API response format. Please check the Weblate API.";
-        langs = [];
-        return;
-      }
-
-      langs = Array.from(new Set(data.map(item => item.language_code))).sort();
-      error = ''; // Clear error if successful
+      langs = [...new Set(data.map(item => item.language_code))].sort();
+      error = '';
     } catch (err) {
-      console.error("Network error:", err);
-      error = `Network Error: ${err.message}`;
+      console.error("Fetch error:", err);
       langs = [];
+      error = `⚠ ${err.message || 'Unknown error.'}`;
     }
   }
 
   function save() {
-    console.log("Save button clicked");
-    if (onFetch) {
-      onFetch(); // Call the external function passed via the prop
+    if (!langs.length) {
+      error = 'No languages loaded. Check API, project, or component.';
+      return;
     }
+    if (!$sourceLang || !$targetLang) {
+      error = 'Please select both source and target languages.';
+      return;
+    }
+    error = '';
+    onFetch();
   }
 </script>
 
 <div>
   <button on:click={onToggleTheme}>
-    {$darkMode ? 'Light Mode' : 'Dark Mode'}
+    {$darkMode ? '☀ Light Mode' : '🌙 Dark Mode'}
   </button>
 
-  <h1>Webl8 – Weblate Translator</h1>
+  <h1>🌐 Webl8 – Weblate Translator</h1>
 
   {#if error}
     <div style="color: red; margin-bottom: 1rem;">{error}</div>
@@ -80,7 +74,7 @@
   <input id="baseUrl" bind:value={$baseUrl} placeholder="https://translate.example.com/api" />
 
   <label for="apiToken">API Token</label>
-  <input id="apiToken" bind:value={$token} placeholder="API Token" type="password" />
+  <input id="apiToken" type="password" bind:value={$token} placeholder="API Token" />
 
   <label for="project">Project</label>
   <input id="project" bind:value={$project} placeholder="project-name" />
@@ -88,39 +82,26 @@
   <label for="component">Component</label>
   <input id="component" bind:value={$component} placeholder="component-name" />
 
-  <label for="sourceLang">Source language</label>
-  <select id="sourceLang" bind:value={$sourceLang}>
-    <option value="" disabled>Select source language</option>
-    {#each langs as lang}
-      <option value={lang}>{lang}</option>
-    {/each}
-  </select>
+  {#if langs.length > 0}
+    <label for="sourceLang">Source language</label>
+    <select id="sourceLang" bind:value={$sourceLang}>
+      <option value="" disabled selected>Select source language</option>
+      {#each langs as lang}
+        <option value={lang}>{lang}</option>
+      {/each}
+    </select>
 
-  <label for="targetLang">Target language</label>
-  <select id="targetLang" bind:value={$targetLang}>
-    <option value="" disabled>Select target language</option>
-    {#each langs as lang}
-      <option value={lang}>{lang}</option>
-    {/each}
-  </select>
+    <label for="targetLang">Target language</label>
+    <select id="targetLang" bind:value={$targetLang}>
+      <option value="" disabled selected>Select target language</option>
+      {#each langs as lang}
+        <option value={lang}>{lang}</option>
+      {/each}
+    </select>
+  {/if}
 
   <button on:click={save} disabled={$loading}>
     {#if $loading}Loading...{/if}
     {#if !$loading}Fetch untranslated strings{/if}
   </button>
 </div>
-
-<style>
-  label {
-    font-weight: bold;
-    margin-top: 1rem;
-    display: block;
-  }
-
-  input, select, button {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-</style>

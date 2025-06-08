@@ -12,7 +12,7 @@ export const settings = writable<Settings>({
   apiToken: '',
   sourceLang: 'en',
   targetLang: 'nl',
-  selectedProject: ''
+  selectedProject: '',
 });
 
 // Generic typed selector for derived stores

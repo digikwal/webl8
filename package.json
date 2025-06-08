@@ -5,17 +5,13 @@
   "author": "Digikwal",
   "license": "MIT",
   "private": true,
+  "homepage": "https://digikwal.github.io/webl8",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
-  "files": [
-    "src/",
-    "public/",
-    "index.html"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/digikwal/webl8.git"

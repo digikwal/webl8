@@ -6,12 +6,12 @@ export default defineConfig({
   base: '/webl8', // Required for GitHub Pages
   build: {
     outDir: 'dist',
-    emptyOutDir: true
+    emptyOutDir: true,
   },
   resolve: {
     alias: {
       $components: '/src/components',
-      $lib: '/src/lib'
-    }
-  }
+      $lib: '/src/lib',
+    },
+  },
 });

@@ -1,4 +1,5 @@
-import { writable, derived, Readable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
+import type { Readable } from 'svelte/store';
 
 export interface Settings {
   apiToken: string;
@@ -7,21 +8,19 @@ export interface Settings {
   selectedProject: string;
 }
 
-const defaultSettings: Settings = {
+export const settings = writable<Settings>({
   apiToken: '',
   sourceLang: 'en',
   targetLang: 'nl',
-  selectedProject: '',
-};
+  selectedProject: ''
+});
 
-export const settings = writable<Settings>({ ...defaultSettings });
-
-// Generic selector for derived store keys
+// Generic typed selector for derived stores
 function select<K extends keyof Settings>(key: K): Readable<Settings[K]> {
-  return derived<Settings, Settings[K]>(settings, ($s) => $s[key]);
+  return derived(settings, ($s) => $s[key]);
 }
 
-// Export derived individual fields
+// Expose individual fields
 export const apiToken = select('apiToken');
 export const sourceLang = select('sourceLang');
 export const targetLang = select('targetLang');

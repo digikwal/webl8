@@ -89,17 +89,28 @@ h1 {
 }
 
 .theme-toggle {
-  background: transparent;
-  border: 1px solid var(--text-light);
-  font-size: 0.9rem; /* Updated font size */
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 1rem;
   cursor: pointer;
   transition: border var(--transition-speed);
 }
 
 .dark .theme-toggle {
   border: 1px solid var(--text-dark);
+}
+
+.light .theme-toggle {
+  border: 1px solid var(--text-light);
+}
+
+.settings-form {
+  max-width: 600px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .form-section {
@@ -112,6 +123,21 @@ h1 {
 
 .source {
   margin-bottom: 0.5rem;
+}
+
+.fetch-btn {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #0069ed;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-speed);
+}
+
+.fetch-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .error {

@@ -8,8 +8,11 @@
     targetLang, results, loading, darkMode
   } from './stores.js';
 
+  let fetchError = '';
+
   async function getStrings() {
     loading.set(true);
+    fetchError = '';
     try {
       const res = await fetchStrings({
         baseUrl: $baseUrl,
@@ -19,8 +22,12 @@
         targetLang: $targetLang
       });
       results.set(res);
+      if (!res.length) {
+        fetchError = 'No untranslated strings found.';
+      }
     } catch (err) {
-      console.error("Failed to fetch strings:", err);
+      fetchError = 'Failed to fetch strings.';
+      console.error(err);
       results.set([]);
     } finally {
       loading.set(false);
@@ -32,7 +39,23 @@
   }
 </script>
 
-<div class={$darkMode ? 'dark' : 'light'}>
-  <SettingsForm onFetch={getStrings} onToggleTheme={toggleTheme} />
-  <TranslationList />
+<div class={`app ${$darkMode ? 'dark' : 'light'}`}>
+  <header>
+    <h1>🌐 Webl8 Translator</h1>
+    <button class="theme-toggle" on:click={toggleTheme}>
+      {$darkMode ? '☀ Light Mode' : '🌙 Dark Mode'}
+    </button>
+  </header>
+
+  <section class="form-section">
+    <SettingsForm onFetch={getStrings} />
+  </section>
+
+  {#if fetchError}
+    <div class="error">{fetchError}</div>
+  {/if}
+
+  <section class="translations">
+    <TranslationList />
+  </section>
 </div>

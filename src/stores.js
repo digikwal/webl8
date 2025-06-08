@@ -45,3 +45,12 @@ export const targetLang  = persistentStore('targetLang', '');
 export const darkMode = writable(false);
 export const loading  = writable(false);
 export const results  = writable([]);
+
+// Function to save a value to localStorage directly
+export function saveToLocalStorage(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    console.error(`Failed to save "${key}" to localStorage:`, error);
+  }
+}

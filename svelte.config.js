@@ -12,7 +12,7 @@ const config = {
   kit: {
     adapter: adapter({
       fallback: 'index.html',
-      strict: true
+      strict: true,
     }),
     paths: {
       base: dev ? '' : '/webl8',

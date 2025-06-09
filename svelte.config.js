@@ -10,7 +10,10 @@ const config = {
   preprocess: vitePreprocess(),
 
   kit: {
-    adapter: adapter(),
+    adapter: adapter({
+      fallback: 'index.html',
+      strict: true
+    }),
     paths: {
       base: dev ? '' : '/webl8',
     },

@@ -30,6 +30,7 @@ export const selectedComponent = persist('selectedComponent', '');
 export const sourceStrings = persist('sourceStrings', []);
 export const proposedTranslations = persist('proposedTranslations', []);
 export const acceptedTranslations = persist('acceptedTranslations', []);
+export const aiKey = persist('aiKey', '');
 
 // Session/volatile stores
 export const availableSources = writable([]);

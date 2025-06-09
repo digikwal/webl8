@@ -14,7 +14,7 @@ const config = {
       pages: 'dist',
       assets: 'dist',
       fallback: 'index.html',
-      strict: true
+      strict: true,
     }),
     paths: {
       base: dev ? '' : '/webl8',

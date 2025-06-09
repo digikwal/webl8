@@ -3,6 +3,8 @@ import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
+const dev = process.env.NODE_ENV === 'development';
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   preprocess: vitePreprocess(),
@@ -10,7 +12,7 @@ const config = {
   kit: {
     adapter: adapter(),
     paths: {
-      base: '/webl8',
+      base: dev ? '' : '/webl8',
     },
     alias: {
       $lib: path.resolve('src/lib'),

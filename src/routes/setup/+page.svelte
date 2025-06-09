@@ -1,5 +1,5 @@
+<!-- src/routes/setup/+page.svelte -->
 <script>
-  import { createEventDispatcher } from 'svelte';
   import {
     token,
     project,
@@ -9,7 +9,7 @@
     availableTargets,
   } from '$lib/stores.js';
 
-  const dispatch = createEventDispatcher();
+  import { goto } from '$app/navigation';
 
   let localToken = '';
   let localProject = '';
@@ -38,6 +38,7 @@
     const result = await response.json();
 
     if (result.success) {
+      // Update global stores
       token.set(localToken);
       project.set(localProject);
       sourceLang.set(result.data.source_lang);
@@ -45,7 +46,8 @@
       availableSources.set([result.data.source_lang]);
       availableTargets.set(result.data.target_langs);
 
-      dispatch('configured', result.data);
+      // Go to next step (optional)
+      goto('/fetch');
     } else {
       error = result.error || 'Failed to fetch Weblate project.';
     }

@@ -1,48 +1,47 @@
+<!-- src/routes/translate/+page.svelte -->
 <script>
-  import { sourceStrings, proposedTranslations, sourceLang, targetLang } from '$lib/stores.js';
   import { get } from 'svelte/store';
+  import { sourceStrings, proposedTranslations, sourceLang, targetLang } from '$lib/stores.js';
 
   let preview = [];
   let error = '';
-  let translated = false;
   let loading = false;
+
+  // Reactive derived value instead van get()
+  $: canTranslate = $sourceStrings.length > 0;
 
   async function handleTranslate() {
     error = '';
-    translated = false;
     loading = true;
 
-    const strings = get(sourceStrings);
-    if (!strings.length) {
-      error = 'No source strings available to translate.';
+    try {
+      const formData = new FormData();
+      formData.append('sourceLang', $sourceLang);
+      formData.append('targetLang', $targetLang);
+      formData.append('strings', JSON.stringify($sourceStrings));
+
+      const res = await fetch('/translate', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        proposedTranslations.set(result.data);
+        preview = result.data.slice(0, 5);
+      } else {
+        error = result.error || 'Failed to translate.';
+      }
+    } catch (err) {
+      error = err.message || 'Unexpected error occurred.';
+    } finally {
       loading = false;
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('sourceLang', get(sourceLang));
-    formData.append('targetLang', get(targetLang));
-    formData.append('strings', JSON.stringify(strings));
-
-    const res = await fetch('/translate', {
-      method: 'POST',
-      body: formData,
-    });
-
-    const result = await res.json();
-    loading = false;
-
-    if (result.success) {
-      proposedTranslations.set(result.data);
-      preview = result.data.slice(0, 5);
-      translated = true;
-    } else {
-      error = result.error || 'Failed to translate.';
     }
   }
 </script>
 
-<button on:click={handleTranslate} disabled={loading || !$sourceStrings.length}>
+<button on:click={handleTranslate} disabled={!canTranslate || loading}>
   {#if loading}
     Translating...
   {:else}
@@ -54,7 +53,7 @@
   <p class="form__error">{error}</p>
 {/if}
 
-{#if translated}
+{#if preview.length}
   <h3>Preview of Translations</h3>
   <ul>
     {#each preview as item}

@@ -1,6 +1,17 @@
+<!-- src/routes/push/+page.svelte -->
 <script>
+  import { goto } from '$app/navigation';
   import { token, selectedComponent, acceptedTranslations } from '$lib/stores.js';
-  import { get } from 'svelte/store';
+
+  let tokenValue, selectedComponentValue, acceptedTranslationsValue;
+  $: tokenValue = $token;
+  $: selectedComponentValue = $selectedComponent;
+  $: acceptedTranslationsValue = $acceptedTranslations;
+
+  // redirect naar /review als er niets is om te pushen
+  if ($acceptedTranslations.length === 0) {
+    goto('/review');
+  }
 
   let status = '';
   let error = '';
@@ -14,9 +25,9 @@
     pushed = false;
 
     const formData = new FormData();
-    formData.append('token', get(token));
-    formData.append('component', get(selectedComponent));
-    formData.append('accepted', JSON.stringify(get(acceptedTranslations)));
+    formData.append('token', $token);
+    formData.append('component', $selectedComponent);
+    formData.append('accepted', JSON.stringify($acceptedTranslations));
 
     const res = await fetch('/push', {
       method: 'POST',

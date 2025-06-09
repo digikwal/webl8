@@ -1,19 +1,18 @@
+<!-- src/routes/review/+page.svelte -->
 <script>
+  import { goto } from '$app/navigation';
   import TranslationCard from '$components/TranslationCard.svelte';
   import { proposedTranslations, acceptedTranslations } from '$lib/stores.js';
 
-  let localAccepted = [];
-
-  // Keep local state in sync with store
-  $: localAccepted = $acceptedTranslations;
-
-  function upsertTranslation(id, translation) {
-    return [...localAccepted.filter((t) => t.id !== id), { id, translation }];
+  if ($proposedTranslations.length === 0) {
+    goto('/translate');
   }
+
+  let localAccepted = [];
 
   function handleAccept(event) {
     const { id, translation } = event.detail;
-    localAccepted = upsertTranslation(id, translation);
+    localAccepted = [...localAccepted.filter((t) => t.id !== id), { id, translation }];
     acceptedTranslations.set(localAccepted);
   }
 

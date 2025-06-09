@@ -1,5 +1,5 @@
 <script>
-  import TranslationCard from '$lib/components/TranslationCard.svelte';
+  import TranslationCard from '$components/TranslationCard.svelte';
   import { proposedTranslations, acceptedTranslations } from '$lib/stores.js';
 
   let localAccepted = [];
